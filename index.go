@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"sort"
 	"strings"
 	"time"
 )
@@ -29,28 +28,30 @@ type MergedPrList struct {
 	Title string `json:"title"`
 }
 
-func checkGh() error {
+func checkEnvironment() error {
+	// git repo check
 	out, err := exec.Command("git", "rev-parse", "--is-inside-work-tree").CombinedOutput()
 	if err != nil || strings.TrimSpace(string(out)) != "true" {
-		return errors.New("Opps, This command must be run inside a Git repository")
+		return errors.New("opps, this command must be run inside a Git repository")
 	}
 
+	// gh exists check
 	if _, err := exec.LookPath("gh"); err != nil {
 		msg := `The 'gh' command was not found.
 
-		It looks like GitHub CLI isn't installed yet.
-		You can install it via Homebrew:
-		  brew install gh
+It looks like GitHub CLI isn't installed yet.
+You can install it via Homebrew:
+  brew install gh
 
-		Or check the official download page:
-		  https://cli.github.com/
+Or check the official download page:
+  https://cli.github.com/
 		`
 		return errors.New(msg)
 	}
 
 	if err := exec.Command("gh", "auth", "status").Run(); err != nil {
 		msg := `GitHub CLI is installed, but you're not authenticated.
-		Please run 'gh auth login' first.`
+Please run 'gh auth login' first.`
 		return errors.New(msg)
 	}
 
@@ -72,27 +73,30 @@ func getLastMergedDate() (time.Time, error) {
 	out, err := cmd.CombinedOutput()
 
 	if err != nil {
-		fmt.Printf("failed: %v\n", err)
-		panic(err)
+		return time.Time{}, fmt.Errorf("gh pr list failed: %v\n%s", err, string(out))
 	}
 
 	var prs []PrList
 	if err := json.Unmarshal(out, &prs); err != nil {
-		panic(err)
+		return time.Time{}, fmt.Errorf("failed to decode JSON: %w", err)
 	}
-
-	sort.Slice(prs, func(a, b int) bool {
-		return prs[a].MergedAt.Before(prs[b].MergedAt)
-	})
 
 	if len(prs) == 0 {
 		return time.Time{}, fmt.Errorf("no merged PRs")
 	}
 
-	last := prs[len(prs)-1]
-	fmt.Printf("last merged: #%d at %s\n", last.Number, last.MergedAt)
+	var last time.Time
+	for _, pr := range prs {
+		if pr.MergedAt.After(last) {
+			last = pr.MergedAt
+		}
+	}
 
-	return last.MergedAt, nil
+	if last.IsZero() {
+		return time.Time{}, fmt.Errorf("no merged PRs")
+	}
+
+	return last, nil
 }
 
 func getPrList() ([]MergedPrList, error) {
@@ -132,7 +136,7 @@ func getPrList() ([]MergedPrList, error) {
 }
 
 func main() {
-	if err := checkGh(); err != nil {
+	if err := checkEnvironment(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
@@ -144,4 +148,5 @@ func main() {
 	}
 
 	fmt.Println(mergedPr)
+
 }
