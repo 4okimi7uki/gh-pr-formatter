@@ -8,6 +8,9 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/4okimi7uki/gh-pr-formatter/internal/utils"
+	"github.com/fatih/color"
 )
 
 type TemplateData struct {
@@ -70,9 +73,11 @@ func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
 		return "", fmt.Errorf("failed to write %s: %w", fileName, err)
 	}
 
-	fmt.Println("========================================================")
+	mergedColor := color.RGB(137, 87, 226)
+
+	utils.PrintlnNoErr(mergedColor, "\n========================================================")
 	fmt.Println(" Merged Pull Requests")
-	fmt.Println("========================================================")
+	utils.PrintlnNoErr(mergedColor, "========================================================")
 	fmt.Println(b.String())
 
 	return fileName, nil
