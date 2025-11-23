@@ -28,9 +28,21 @@ GitHub CLI (`gh`) を使って **マージ済み Pull Request を自動収集 & 
 ./releasePrMarkdown/release_YYYYMMDD_hhmm.md
 ```
 
+## 使い方
+
+1. `gh` ありきのツールです。
+2. build して生成したものを `.git` 管理下のプロジェクト直下においてください。
+3. ターミナルで `./gh-pr-formatter` を実行してください。
+4. `./releasePrMarkdown/release_YYYYMM_HHmm.md` が生成されます。
+
+中身をコピーしてPRに貼り付けてください！
+
 ## CLI sample
 
 ```bash
+~/develop/project(main)
+> ./gh-pr-formatter
+
 ========================================================
  Merged Pull Requests
 ========================================================
@@ -53,7 +65,7 @@ GitHub CLI (`gh`) を使って **マージ済み Pull Request を自動収集 & 
 ### Build
 
 Go のクロスコンパイル機能を利用して、各 OS（Linux / macOS / Windows ）向けの実行バイナリを生成できます。
-成果物はすべて ./dist 配下に出力されます。
+成果物はすべて `./dist` 配下に出力されます。
 
 #### 個別 OS 用のバイナリを生成
 
@@ -80,6 +92,14 @@ dist/
 ```
 
 マルチプラットフォームに配布したいときは `make build-all` が便利です。
+
+<!--```shell
+// format コマンド
+golangci-lint run
+
+// 依存関係整理
+go mod tidy
+```-->
 
 ---
 
