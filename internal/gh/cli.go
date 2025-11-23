@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -11,34 +12,48 @@ import (
 	"github.com/4okimi7uki/gh-pr-formatter/internal/pr"
 )
 
+var (
+	ErrNotGitRepo  = errors.New("not a git repository")
+	ErrGhNotFound  = errors.New("gh command not found")
+	ErrGhNotAuthed = errors.New("gh not authenticated")
+)
+
 func CheckEnvironment() error {
 	// git repo check
 	out, err := exec.Command("git", "rev-parse", "--is-inside-work-tree").CombinedOutput()
 	if err != nil || strings.TrimSpace(string(out)) != "true" {
-		return errors.New("oops, this command must be run inside a Git repository")
+		return ErrNotGitRepo
 	}
 
 	// gh exists check
 	if _, err := exec.LookPath("gh"); err != nil {
-		msg := `The 'gh' command was not found.
+		return ErrGhNotFound
+	}
 
+	if err := exec.Command("gh", "auth", "status").Run(); err != nil {
+		return ErrGhNotAuthed
+	}
+
+	return nil
+}
+
+func PrintHelp(err error) {
+	switch err {
+	case ErrNotGitRepo:
+		fmt.Fprintln(os.Stderr, "this command must be run inside a Git repository")
+	case ErrGhNotFound:
+		fmt.Fprintln(os.Stderr, "gh command not found")
+		fmt.Println(`
 It looks like GitHub CLI isn't installed yet.
 You can install it via Homebrew:
   brew install gh
 
 Or check the official download page:
-  https://cli.github.com/
-		`
-		return errors.New(msg)
+  https://cli.github.com/`)
+	case ErrGhNotAuthed:
+		fmt.Fprintln(os.Stderr, "gh is installed, but you're not authenticated")
+		fmt.Fprintln(os.Stderr, "Please run 'gh auth login' first")
 	}
-
-	if err := exec.Command("gh", "auth", "status").Run(); err != nil {
-		msg := `GitHub CLI is installed, but you're not authenticated.
-Please run 'gh auth login' first.`
-		return errors.New(msg)
-	}
-
-	return nil
 }
 
 func GetLastMergedDate() (time.Time, error) {
@@ -112,7 +127,7 @@ func GetPrList() ([]pr.MergedPrList, error) {
 	}
 
 	if len(mergedPr) == 0 {
-		return nil, fmt.Errorf("No Merged PRs")
+		return nil, fmt.Errorf("no Merged PRs")
 	}
 
 	return mergedPr, nil
