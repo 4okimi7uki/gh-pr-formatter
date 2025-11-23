@@ -50,7 +50,7 @@ GitHub CLI (`gh`) を使って **マージ済み Pull Request を自動収集 & 
 
 ## 開発者向け
 
-### Build（開発者向け）
+### Build
 
 Go のクロスコンパイル機能を利用して、各 OS（Linux / macOS / Windows ）向けの実行バイナリを生成できます。
 成果物はすべて ./dist 配下に出力されます。
