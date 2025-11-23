@@ -31,7 +31,7 @@ func renderTemplate(data TemplateData) (string, error) {
 	return out.String(), nil
 }
 
-func BuildMarkdown(groupedPrs map[string][]int) (error, string) {
+func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
 	var b strings.Builder
 
 	authors := make([]string, 0, len(groupedPrs))
@@ -53,12 +53,12 @@ func BuildMarkdown(groupedPrs map[string][]int) (error, string) {
 		List: b.String(),
 	})
 	if err != nil {
-		return fmt.Errorf("failed to render template: %w", err), ""
+		return "", fmt.Errorf("failed to render template: %w", err)
 	}
 
 	dir := "./releasePrMarkdown"
 	if err := os.MkdirAll(dir, 0755); err != nil {
-		return fmt.Errorf("failed to create dir: %w", err), ""
+		return "", fmt.Errorf("failed to create dir: %w", err)
 	}
 
 	loc, _ := time.LoadLocation("Asia/Tokyo")
@@ -67,7 +67,7 @@ func BuildMarkdown(groupedPrs map[string][]int) (error, string) {
 
 	err = os.WriteFile(fileName, []byte(rendered), 0644)
 	if err != nil {
-		return fmt.Errorf("failed to write %s: %w", fileName, err), ""
+		return "", fmt.Errorf("failed to write %s: %w", fileName, err)
 	}
 
 	fmt.Println("========================================================")
@@ -75,5 +75,5 @@ func BuildMarkdown(groupedPrs map[string][]int) (error, string) {
 	fmt.Println("========================================================")
 	fmt.Println(b.String())
 
-	return nil, fileName
+	return fileName, nil
 }

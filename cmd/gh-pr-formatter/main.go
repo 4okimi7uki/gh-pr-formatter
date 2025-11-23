@@ -11,7 +11,7 @@ import (
 
 func main() {
 	if err := gh.CheckEnvironment(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		gh.PrintHelp(err)
 		os.Exit(1)
 	}
 
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	groupedPrs := pr.GroupedPrsByAuthor(mergedPr)
-	err, fileName := template.BuildMarkdown(groupedPrs)
+	fileName, err := template.BuildMarkdown(groupedPrs)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
