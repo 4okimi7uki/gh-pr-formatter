@@ -1,12 +1,15 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
+	"text/template"
 	"time"
 )
 
@@ -28,11 +31,15 @@ type MergedPrList struct {
 	Title string `json:"title"`
 }
 
+type TemplateData struct {
+	List string
+}
+
 func checkEnvironment() error {
 	// git repo check
 	out, err := exec.Command("git", "rev-parse", "--is-inside-work-tree").CombinedOutput()
 	if err != nil || strings.TrimSpace(string(out)) != "true" {
-		return errors.New("opps, this command must be run inside a Git repository")
+		return errors.New("oops, this command must be run inside a Git repository")
 	}
 
 	// gh exists check
@@ -135,6 +142,69 @@ func getPrList() ([]MergedPrList, error) {
 	return mergedPr, nil
 }
 
+func groupedPrsByAuthor(prs []MergedPrList) map[string][]int {
+	m := make(map[string][]int)
+	for _, pr := range prs {
+		m[pr.Author.Login] = append(m[pr.Author.Login], pr.Number)
+	}
+	return m
+}
+
+//go:embed template.md
+var templateSource string
+
+func renderTemplate(data TemplateData) (string, error) {
+	tpl, err := template.New("release").Parse(templateSource)
+	if err != nil {
+		return "", err
+	}
+
+	var out strings.Builder
+	if err := tpl.Execute(&out, data); err != nil {
+		return "", err
+	}
+
+	return out.String(), nil
+}
+
+func buildMarkdown(groupedPrs map[string][]int) error {
+	var b strings.Builder
+
+	authors := make([]string, 0, len(groupedPrs))
+	for a := range groupedPrs {
+		authors = append(authors, a)
+	}
+	sort.Strings(authors)
+
+	for _, author := range authors {
+		nums := groupedPrs[author]
+		fmt.Fprintf(&b, "@%s\n", author)
+		for _, num := range nums {
+			fmt.Fprintf(&b, "- #%d\n", num)
+		}
+		b.WriteString("\n")
+	}
+
+	rendered, err := renderTemplate(TemplateData{
+		List: b.String(),
+	})
+	if err != nil {
+		return fmt.Errorf("failed to render template: %w", err)
+	}
+
+	err = os.WriteFile("RELEASE.md", []byte(rendered), 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write RELEASE.md: %w", err)
+	}
+
+	fmt.Println("========================================================")
+	fmt.Println(" Merged Pull Requests")
+	fmt.Println("========================================================")
+	fmt.Println(b.String())
+
+	return nil
+}
+
 func main() {
 	if err := checkEnvironment(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -147,6 +217,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(mergedPr)
+	groupedPrs := groupedPrsByAuthor(mergedPr)
+	err = buildMarkdown(groupedPrs)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	fmt.Println("========================================================")
+	fmt.Println(" 🎉 SUCCESS: Release PR Markdown created successfully!")
+	fmt.Println(" -> Output: RELEASE.md")
+	fmt.Println("========================================================")
 
 }
