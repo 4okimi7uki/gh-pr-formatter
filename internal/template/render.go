@@ -9,7 +9,6 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/4okimi7uki/gh-pr-formatter/internal/utils"
 	"github.com/fatih/color"
 )
 
@@ -35,7 +34,7 @@ func renderTemplate(data TemplateData) (string, error) {
 }
 
 func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
-	var b strings.Builder
+	var prList strings.Builder
 
 	authors := make([]string, 0, len(groupedPrs))
 	for a := range groupedPrs {
@@ -45,15 +44,15 @@ func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
 
 	for _, author := range authors {
 		nums := groupedPrs[author]
-		fmt.Fprintf(&b, "@%s\n", author)
+		fmt.Fprintf(&prList, "@%s\n", author)
 		for _, num := range nums {
-			fmt.Fprintf(&b, "- #%d\n", num)
+			fmt.Fprintf(&prList, "- #%d\n", num)
 		}
-		b.WriteString("\n")
+		prList.WriteString("\n")
 	}
 
 	rendered, err := renderTemplate(TemplateData{
-		List: b.String(),
+		List: prList.String(),
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to render template: %w", err)
@@ -74,11 +73,13 @@ func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
 	}
 
 	mergedColor := color.RGB(137, 87, 226)
+	border := mergedColor.Sprint("-------------------------")
+	fmt.Println("\n" + border)
+	fmt.Println("   Merged Pull Requests    ")
+	fmt.Println(border)
 
-	utils.PrintlnNoErr(mergedColor, "\n========================================================")
-	fmt.Println(" Merged Pull Requests")
-	utils.PrintlnNoErr(mergedColor, "========================================================")
-	fmt.Println(b.String())
+	fmt.Println(prList.String())
+	fmt.Println(border)
 
 	return fileName, nil
 }

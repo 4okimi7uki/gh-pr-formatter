@@ -14,6 +14,7 @@ import (
 
 func main() {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
+	s.Suffix = " PR fetching..."
 	s.Writer = os.Stderr
 	s.Start()
 	defer s.Stop()
