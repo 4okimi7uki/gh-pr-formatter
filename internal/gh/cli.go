@@ -56,7 +56,7 @@ Or check the official download page:
 	}
 }
 
-func GetLastMergedDate() (time.Time, error) {
+func GetLastMergedDate(repo string) (time.Time, error) {
 	cmdStr := `
 	pr list
 	--state merged
@@ -67,6 +67,11 @@ func GetLastMergedDate() (time.Time, error) {
 	`
 
 	getDateCmd := strings.Fields(cmdStr)
+
+	if repo != "" {
+		getDateCmd = append(getDateCmd, "--repo", repo)
+	}
+
 	cmd := exec.Command("gh", getDateCmd...)
 	out, err := cmd.CombinedOutput()
 
@@ -97,7 +102,7 @@ func GetLastMergedDate() (time.Time, error) {
 	return last, nil
 }
 
-func GetPrList() ([]model.MergedPrList, error) {
+func GetPrList(repo string) ([]model.MergedPrList, error) {
 	getPrListCmdStr := `
 	pr list
 	--state merged
@@ -107,7 +112,7 @@ func GetPrList() ([]model.MergedPrList, error) {
 	--json number,title,author,mergedAt
 	`
 
-	_from, err := GetLastMergedDate()
+	_from, err := GetLastMergedDate(repo)
 	if err != nil {
 		return []model.MergedPrList{}, fmt.Errorf("getLastMergedDate failed: %w", err)
 	}
@@ -116,6 +121,11 @@ func GetPrList() ([]model.MergedPrList, error) {
 	to := time.Now().UTC().Format(time.RFC3339)
 
 	arg := strings.Fields(fmt.Sprintf(getPrListCmdStr, from, to))
+
+	if repo != "" {
+		arg = append(arg, "--repo", repo)
+	}
+
 	out, err := exec.Command("gh", arg...).CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("gh pr list failed: %v\n%s", err, string(out))
