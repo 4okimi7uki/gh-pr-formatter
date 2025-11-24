@@ -75,7 +75,7 @@ func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
 	mergedColor := color.RGB(137, 87, 226)
 	border := mergedColor.Sprint("-------------------------")
 	fmt.Println("\n" + border)
-	fmt.Println("   Merged Pull Requests    ")
+	fmt.Println("  Merged Pull Requests   ")
 	fmt.Println(border)
 
 	fmt.Println(prList.String())

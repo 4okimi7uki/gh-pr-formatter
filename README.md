@@ -40,22 +40,27 @@ GitHub CLI (`gh`) を使って **マージ済み Pull Request を自動収集 & 
 ## CLI sample
 
 ```bash
-~/develop/project(main)
-> ./gh-pr-formatter
-
-========================================================
- Merged Pull Requests
-========================================================
+~/develop/project (main)
+% ./gh-pr-formatter
+⠙ PR fetching...
+-------------------------
+   Merged Pull Requests
+-------------------------
 @4okimi7uki
 - #18
 - #16
 - #15
 - #13
+- #11
+- #10
+- #9
+- #8
 ...
-========================================================
+-------------------------
+==========================================================
  🎉 SUCCESS: Release PR Markdown created successfully!
- -> Output: ./releasePrMarkdown/release_20251123_1918.md
-========================================================
+ -> Output: ./releasePrMarkdown/release_20251124_1419.md
+==========================================================
 ```
 
 ---

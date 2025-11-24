@@ -46,11 +46,13 @@ func main() {
 	s.Stop()
 	fmt.Fprintln(os.Stderr)
 
-	successColor := color.RGB(44, 242, 0)
+	successColor := color.RGB(67, 219, 88)
+
+	// mergedColor := color.RGB(137, 87, 226)
 
 	utils.PrintlnNoErr(successColor, "==========================================================")
 	utils.PrintlnNoErr(successColor, " 🎉 SUCCESS: Release PR Markdown created successfully!")
-	utils.PrintlnNoErr(successColor, " -> Output: "+fileName)
+	fmt.Println(successColor.Sprint(" -> Output: ") + fileName)
 	utils.PrintlnNoErr(successColor, "==========================================================")
 
 }
