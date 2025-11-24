@@ -1,8 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/4okimi7uki/gh-pr-formatter/internal/gh"
@@ -19,6 +21,17 @@ func main() {
 	s.Start()
 	defer s.Stop()
 
+	for _, arg := range os.Args[1:] {
+		if strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--") {
+			fmt.Fprintf(os.Stderr,
+				"Error: '%s' is not a valid option. Use '--' prefix for all flags.\n", arg)
+			os.Exit(1)
+		}
+	}
+
+	repo := flag.String("repo", "", "Repository to operate on (e.g. owner/repo)")
+	flag.Parse()
+
 	if err := gh.CheckEnvironment(); err != nil {
 		s.Stop()
 		fmt.Fprintln(os.Stderr)
@@ -26,7 +39,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	mergedPr, err := gh.GetPrList()
+	mergedPr, err := gh.GetPrList(*repo)
 	if err != nil {
 		s.Stop()
 		fmt.Fprintln(os.Stderr)
