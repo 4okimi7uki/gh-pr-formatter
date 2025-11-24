@@ -49,7 +49,7 @@ GitHub CLI (`gh`) を使って **マージ済み Pull Request を自動収集 & 
 ```bash
 ./gh-pr-formatter --repo owner/repo
 
-// 例
+# 例
 ./gh-pr-formatter --repo 4okimi7uki/gh-pr-formatter
 ```
 
