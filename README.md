@@ -30,10 +30,34 @@ GitHub CLI (`gh`) を使って **マージ済み Pull Request を自動収集 & 
 
 ## 使い方
 
-1. `gh` ありきのツールです。
-2. build して生成したものを `.git` 管理下のプロジェクト直下においてください。
-3. ターミナルで `./gh-pr-formatter` を実行してください。
-4. `./releasePrMarkdown/release_YYYYMM_HHmm.md` が生成されます。
+本ツールは GitHub CLI（`gh`）を利用して Pull Request 情報を取得します。[Releases ページ](https://github.com/4okimi7uki/gh-pr-formatter/releases) から対応する実行ファイルをダウンロードしてください。
+基本的な利用方法は以下のとおりです。
+
+### デフォルト動作
+
+カレントディレクトリが `Git` 管理リポジトリである場合、
+そのリポジトリを対象として処理を実行します。
+
+```bash
+./gh-pr-formatter
+```
+
+### 任意リポジトリの指定（オプション）
+
+`--repo` オプションを使用すると、対象とするリポジトリを明示的に指定できます。
+
+```bash
+./gh-pr-formatter --repo owner/repo
+
+// 例
+./gh-pr-formatter --repo 4okimi7uki/gh-pr-formatter
+```
+
+> `--repo` を指定した場合、カレントディレクトリが `Git` 管理下である必要はありません。
+
+### Output
+
+`./releasePrMarkdown/release_YYYYMM_HHmm.md` が生成されます。
 
 中身をコピーしてPRに貼り付けてください！
 
