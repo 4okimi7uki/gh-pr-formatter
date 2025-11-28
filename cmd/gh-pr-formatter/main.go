@@ -32,7 +32,7 @@ func main() {
 	repo := flag.String("repo", "", "Repository to operate on (e.g. owner/repo)")
 	flag.Parse()
 
-	if err := gh.CheckEnvironment(); err != nil {
+	if err := gh.CheckEnvironment(*repo); err != nil {
 		s.Stop()
 		fmt.Fprintln(os.Stderr)
 		gh.PrintHelp(err)

@@ -18,13 +18,15 @@ var (
 	ErrGhNotAuthed = errors.New("gh not authenticated")
 )
 
-func CheckEnvironment() error {
-	// git repo check
-	out, err := exec.Command("git", "rev-parse", "--is-inside-work-tree").CombinedOutput()
-	if err != nil || strings.TrimSpace(string(out)) != "true" {
-		return ErrNotGitRepo
-	}
+func CheckEnvironment(repo string) error {
 
+	if repo == "" {
+		// git repo check
+		out, err := exec.Command("git", "rev-parse", "--is-inside-work-tree").CombinedOutput()
+		if err != nil || strings.TrimSpace(string(out)) != "true" {
+			return ErrNotGitRepo
+		}
+	}
 	// gh exists check
 	if _, err := exec.LookPath("gh"); err != nil {
 		return ErrGhNotFound
@@ -40,7 +42,7 @@ func CheckEnvironment() error {
 func PrintHelp(err error) {
 	switch err {
 	case ErrNotGitRepo:
-		fmt.Fprintln(os.Stderr, "this command must be run inside a Git repository")
+		fmt.Fprintln(os.Stderr, "this command must be run in a Git repository or with the '--repo owner/repo' option")
 	case ErrGhNotFound:
 		fmt.Fprintln(os.Stderr, "gh command not found")
 		fmt.Println(`
