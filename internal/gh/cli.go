@@ -150,7 +150,7 @@ type githubRelease struct {
 	TagName string `json:"tag_name"`
 }
 
-func CheckLatestVersion(owner, repo, currentVer string) (string, error) {
+func GetLatestVersion(owner, repo string) (string, error) {
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/releases/latest", owner, repo)
 
 	req, err := http.NewRequest("GET", url, nil)

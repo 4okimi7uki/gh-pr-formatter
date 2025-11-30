@@ -15,6 +15,11 @@ import (
 )
 
 func main() {
+
+	res, err := gh.GetLatestVersion("4okimi7uki", "gh-pr-formatter")
+
+	fmt.Println(res)
+
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Suffix = " PR fetching..."
 	s.Writer = os.Stderr
