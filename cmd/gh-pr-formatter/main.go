@@ -9,17 +9,14 @@ import (
 
 	"github.com/4okimi7uki/gh-pr-formatter/internal/gh"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/template"
+	"github.com/4okimi7uki/gh-pr-formatter/internal/ui"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/utils"
 	"github.com/briandowns/spinner"
-	"github.com/fatih/color"
 )
 
+var version = "v0.2.0"
+
 func main() {
-
-	res, err := gh.GetLatestVersion("4okimi7uki", "gh-pr-formatter")
-
-	fmt.Println(res)
-
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Suffix = " PR fetching..."
 	s.Writer = os.Stderr
@@ -61,16 +58,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	// display result
 	s.Stop()
 	fmt.Fprintln(os.Stderr)
+	ui.SuccessBox("🎉 SUCCESS:", "  Release PR Markdown created successfully!", "  ↳ Output: "+fileName)
 
-	successColor := color.RGB(67, 219, 88)
-
-	// mergedColor := color.RGB(137, 87, 226)
-
-	utils.PrintlnNoErr(successColor, "==========================================================")
-	utils.PrintlnNoErr(successColor, " 🎉 SUCCESS: Release PR Markdown created successfully!")
-	fmt.Println(successColor.Sprint(" -> Output: ") + fileName)
-	utils.PrintlnNoErr(successColor, "==========================================================")
+	// version check
+	msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version)
+	if msg != "" {
+		ui.Boxed(msg, "Download: https://github.com/4okimi7uki/gh-pr-formatter/releases")
+	}
 
 }

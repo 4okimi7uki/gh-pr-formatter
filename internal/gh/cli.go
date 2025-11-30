@@ -150,7 +150,7 @@ type githubRelease struct {
 	TagName string `json:"tag_name"`
 }
 
-func GetLatestVersion(owner, repo string) (string, error) {
+func getLatestVersion(owner, repo string) (string, error) {
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/releases/latest", owner, repo)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -179,4 +179,17 @@ func GetLatestVersion(owner, repo string) (string, error) {
 		return "", err
 	}
 	return release.TagName, nil
+}
+
+func CheckLatestVersion(owner, repo, version string) (string, error) {
+	latest, err := getLatestVersion(owner, repo)
+	if err == nil && latest != "" {
+		latestTrimmed := strings.TrimPrefix(latest, "v")
+		currentTrimmed := strings.TrimPrefix(version, "v")
+
+		if latestTrimmed != currentTrimmed {
+			return fmt.Sprintf("a new version of gh-pr-formatter is version available: %s --> %s", version, latest), nil
+		}
+	}
+	return "", nil
 }
