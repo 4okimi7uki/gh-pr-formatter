@@ -64,9 +64,10 @@ func main() {
 	ui.SuccessBox("🎉 SUCCESS:", "  Release PR Markdown created successfully!", "  ↳ Output: "+fileName)
 
 	// version check
-	msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version)
-	if msg != "" {
+	if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version); err == nil && msg != "" {
 		ui.Boxed(msg, "Download: https://github.com/4okimi7uki/gh-pr-formatter/releases")
+	} else if err != nil {
+		_ = err // or log.Printf("version check failed: %v", err)
 	}
 
 }
