@@ -14,9 +14,19 @@ import (
 	"github.com/briandowns/spinner"
 )
 
-var version = "v0.2.0"
+var Version = "v0.0.0-dev"
 
 func main() {
+	versionFlag := flag.Bool("version", false, "Print version information")
+	repo := flag.String("repo", "", "Repository to operate on (e.g. owner/repo)")
+
+	flag.Parse()
+
+	if *versionFlag {
+		fmt.Printf("gh-pr-formatter version %s\n", Version)
+		os.Exit(0)
+	}
+
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Suffix = " PR fetching..."
 	s.Writer = os.Stderr
@@ -30,9 +40,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
-	repo := flag.String("repo", "", "Repository to operate on (e.g. owner/repo)")
-	flag.Parse()
 
 	if err := gh.CheckEnvironment(*repo); err != nil {
 		s.Stop()
@@ -64,7 +71,7 @@ func main() {
 	ui.SuccessBox("🎉 SUCCESS:", "  Release PR Markdown created successfully!", "  ↳ Output: "+fileName)
 
 	// version check
-	if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version); err == nil && msg != "" {
+	if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", Version); err == nil && msg != "" {
 		ui.Boxed(msg, "Download: https://github.com/4okimi7uki/gh-pr-formatter/releases")
 	} else if err != nil {
 		_ = err // or log.Printf("version check failed: %v", err)
