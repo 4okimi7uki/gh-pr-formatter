@@ -19,7 +19,7 @@ jobs:
           go-version: "1.25.4"
 
       - name: Build all
-        run: make build-all
+        run: make build-all VERSION=${{ github.ref_name }}
 
       - name: Create GitHub Release and upload dist
         uses: softprops/action-gh-release@v2
