@@ -20,7 +20,7 @@ import (
 var Version = "v0.0.0-dev"
 
 func main() {
-	godotenv.Load()
+	_ = godotenv.Load()
 	token := os.Getenv("GITHUB_TOKEN")
 	if token == "" {
 		fmt.Fprintln(os.Stderr, "GITHUB TOKEN not set")
