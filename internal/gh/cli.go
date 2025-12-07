@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	model "github.com/4okimi7uki/gh-pr-formatter/internal/model"
+	models "github.com/4okimi7uki/gh-pr-formatter/internal/models"
 )
 
 var (
@@ -82,7 +82,7 @@ func GetLastMergedDate(repo string) (time.Time, error) {
 		return time.Time{}, fmt.Errorf("gh pr list failed: %v\n%s", err, string(out))
 	}
 
-	var prs []model.PrList
+	var prs []models.PrList
 	if err := json.Unmarshal(out, &prs); err != nil {
 		return time.Time{}, fmt.Errorf("failed to decode JSON: %w", err)
 	}
@@ -105,7 +105,7 @@ func GetLastMergedDate(repo string) (time.Time, error) {
 	return last, nil
 }
 
-func GetPrList(repo string) ([]model.MergedPrList, error) {
+func GetPrList(repo string) ([]models.MergedPrList, error) {
 	getPrListCmdStr := `
 	pr list
 	--state merged
@@ -117,7 +117,7 @@ func GetPrList(repo string) ([]model.MergedPrList, error) {
 
 	_from, err := GetLastMergedDate(repo)
 	if err != nil {
-		return []model.MergedPrList{}, fmt.Errorf("getLastMergedDate failed: %w", err)
+		return []models.MergedPrList{}, fmt.Errorf("getLastMergedDate failed: %w", err)
 	}
 
 	from := _from.UTC().Format(time.RFC3339)
@@ -134,7 +134,7 @@ func GetPrList(repo string) ([]model.MergedPrList, error) {
 		return nil, fmt.Errorf("gh pr list failed: %v\n%s", err, string(out))
 	}
 
-	var mergedPr []model.MergedPrList
+	var mergedPr []models.MergedPrList
 	if err := json.Unmarshal(out, &mergedPr); err != nil {
 		return nil, fmt.Errorf("failed to decode JSON: %w", err)
 	}
