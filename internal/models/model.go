@@ -3,8 +3,9 @@ package models
 import "time"
 
 type PrList struct {
-	Number   int       `json:"number"`
-	MergedAt time.Time `json:"mergedAt"`
+	Number    int       `json:"number"`
+	MergedAt  time.Time `json:"mergedAt"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type Author struct {
