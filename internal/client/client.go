@@ -25,14 +25,17 @@ type pullRequestsResponse struct {
 					Number      int       `json:"number"`
 					HeadRefName string    `json:"headRefName"`
 					MergedAt    time.Time `json:"mergedAt"`
+					CreatedAt   time.Time `json:"createdAt"`
 				} `json:"nodes"`
 			} `json:"main"`
 			Develop struct {
 				Nodes []struct {
-					Number   int       `json:"number"`
-					Title    string    `json:"title"`
-					MergedAt time.Time `json:"mergedAt"`
-					Author   struct {
+					Number      int       `json:"number"`
+					HeadRefName string    `json:"headRefName"`
+					Title       string    `json:"title"`
+					MergedAt    time.Time `json:"mergedAt"`
+					CreatedAt   time.Time `json:"createdAt"`
+					Author      struct {
 						Login string `json:"login"`
 					} `json:"author"`
 				} `json:"nodes"`
@@ -99,7 +102,7 @@ func (c *Client) ListMergedPullRequests(
 	owner,
 	name string,
 	developLimit int,
-) ([]models.MergedPrList, error) {
+) ([]models.MergedPrList, time.Time, error) {
 	const mainLimit = 20
 
 	const query = `
@@ -114,6 +117,7 @@ func (c *Client) ListMergedPullRequests(
       nodes {
         number
         mergedAt
+        createdAt
         headRefName
       }
     }
@@ -127,6 +131,8 @@ func (c *Client) ListMergedPullRequests(
       nodes {
         number
         mergedAt
+        createdAt
+        headRefName
         title
         author { login }
       }
@@ -143,7 +149,7 @@ func (c *Client) ListMergedPullRequests(
 	var result pullRequestsResponse
 
 	if err := c.Do(query, vars, &result); err != nil {
-		return nil, err
+		return nil, time.Time{}, err
 	}
 
 	var mainPrs []models.MergedPrList
@@ -154,8 +160,9 @@ func (c *Client) ListMergedPullRequests(
 		}
 		mainPrs = append(mainPrs, models.MergedPrList{
 			PrList: models.PrList{
-				Number:   node.Number,
-				MergedAt: node.MergedAt,
+				Number:    node.Number,
+				MergedAt:  node.MergedAt,
+				CreatedAt: node.CreatedAt,
 			},
 		})
 	}
@@ -176,12 +183,12 @@ func (c *Client) ListMergedPullRequests(
 	}
 
 	if len(mainPrs) == 0 {
-		return nil, fmt.Errorf("no non-hotfix merged pull requests found on main")
+		return nil, time.Time{}, fmt.Errorf("no non-hotfix merged pull requests found on main")
 	}
 
 	from := mainPrs[len(mainPrs)-1].MergedAt
 
 	filtered := filterPullRequestsSince(from, devPrs)
 
-	return filtered, nil
+	return filtered, from, nil
 }

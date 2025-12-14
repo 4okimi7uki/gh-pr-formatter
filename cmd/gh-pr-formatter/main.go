@@ -60,7 +60,7 @@ func main() {
 	}
 
 	c := client.NewClient(token)
-	prs, err := c.ListMergedPullRequests(owner, repoName, 50)
+	prs, from, err := c.ListMergedPullRequests(owner, repoName, 50)
 	if err != nil {
 		fmt.Fprintf(os.Stderr,
 			"Error: '%s'\n", err)
@@ -82,7 +82,7 @@ func main() {
 	}
 
 	groupedPrs := pr.GroupedPrsByAuthor(prs)
-	fileName, err := template.BuildMarkdown(groupedPrs)
+	fileName, err := template.BuildMarkdown(groupedPrs, from)
 	if err != nil {
 		s.Stop()
 		fmt.Fprintln(os.Stderr)

@@ -33,7 +33,7 @@ func renderTemplate(data TemplateData) (string, error) {
 	return out.String(), nil
 }
 
-func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
+func BuildMarkdown(groupedPrs map[string][]int, from time.Time) (string, error) {
 	var prList strings.Builder
 
 	authors := make([]string, 0, len(groupedPrs))
@@ -73,9 +73,14 @@ func BuildMarkdown(groupedPrs map[string][]int) (string, error) {
 	}
 
 	mergedColor := color.RGB(137, 87, 226)
-	border := mergedColor.Sprint("-------------------------")
+	headTitle := " Merged Pull Requests \n"
+	period := fmt.Sprintf(" Period: %s → Now\n", from.In(loc).Format("2006-01-02 15:04 MST"))
+
+	barLength := len(max(headTitle, period))
+	border := mergedColor.Sprint(strings.Repeat("-", barLength))
 	fmt.Println("\n" + border)
-	fmt.Println("  Merged Pull Requests   ")
+	fmt.Print(headTitle)
+	fmt.Print(period)
 	fmt.Println(border)
 
 	fmt.Println(prList.String())
