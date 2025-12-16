@@ -3,9 +3,10 @@ package models
 import "time"
 
 type PrList struct {
-	Number    int       `json:"number"`
-	MergedAt  time.Time `json:"mergedAt"`
-	CreatedAt time.Time `json:"createdAt"`
+	Number      int       `json:"number"`
+	MergedAt    time.Time `json:"mergedAt"`
+	CreatedAt   time.Time `json:"createdAt"`
+	HeadRefName string    `json:"headeRefName"`
 }
 
 type Author struct {

@@ -19,6 +19,17 @@ import (
 
 var Version = "v0.0.0-dev"
 
+type StringSlice []string
+
+func (s *StringSlice) String() string {
+	return strings.Join(*s, ",")
+}
+
+func (s *StringSlice) Set(v string) error {
+	*s = append(*s, v)
+	return nil
+}
+
 func main() {
 	_ = godotenv.Load()
 	token := os.Getenv("GITHUB_TOKEN")
@@ -34,12 +45,14 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
-	// version check
+	// get options
 	versionFlag := flag.Bool("version", false, "Print version information")
 	repo := flag.String("repo", "", "Repository to operate on (e.g. owner/repo)")
+	var excludePrefixes StringSlice
+	flag.Var(&excludePrefixes, "x", "exclude branch prefix (repeatable)")
 	flag.Parse()
 
+	// version check
 	if *versionFlag {
 		fmt.Printf("gh-pr-formatter version %s\n", Version)
 		os.Exit(0)
@@ -60,7 +73,7 @@ func main() {
 	}
 
 	c := client.NewClient(token)
-	prs, from, err := c.ListMergedPullRequests(owner, repoName, 50)
+	prs, from, err := c.ListMergedPullRequests(owner, repoName, 50, excludePrefixes...)
 	if err != nil {
 		fmt.Fprintf(os.Stderr,
 			"Error: '%s'\n", err)

@@ -98,10 +98,18 @@ func filterPullRequestsSince(from time.Time, prs []models.MergedPrList) []models
 	return filteredPrs
 }
 
+func hasExcludePrefix(branch string, prefixes []string) bool {
+	for _, prefix := range prefixes {
+		return strings.HasPrefix(branch, prefix+"/")
+	}
+	return false
+}
+
 func (c *Client) ListMergedPullRequests(
 	owner,
 	name string,
 	developLimit int,
+	excludePrefix ...string,
 ) ([]models.MergedPrList, time.Time, error) {
 	const mainLimit = 20
 
@@ -158,11 +166,16 @@ func (c *Client) ListMergedPullRequests(
 		if strings.HasPrefix(node.HeadRefName, "hotfix/") {
 			continue
 		}
+		if hasExcludePrefix(node.HeadRefName, excludePrefix) {
+			continue
+		}
+
 		mainPrs = append(mainPrs, models.MergedPrList{
 			PrList: models.PrList{
-				Number:    node.Number,
-				MergedAt:  node.MergedAt,
-				CreatedAt: node.CreatedAt,
+				Number:      node.Number,
+				MergedAt:    node.MergedAt,
+				CreatedAt:   node.CreatedAt,
+				HeadRefName: node.HeadRefName,
 			},
 		})
 	}
