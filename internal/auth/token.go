@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -12,34 +13,62 @@ import (
 )
 
 const (
-	service = "gh-pr-formatter"
-	user    = "default"
+	Service     = "gh-pr-formatter"
+	User        = "default"
+	EnvTokenKey = "GH_PR_FORMATTER_TOKEN"
 )
 
-func LoadGitHubToken() (string, error) {
-	// #1 Keychain
-	token, err := keyring.Get(service, user)
-	if err == nil && token != "" {
-		return token, nil
-	}
+var ErrTokenNotFound = errors.New("token not found")
 
-	// #2-1 Env
-	_ = godotenv.Load()
-	token = os.Getenv("GITHUB_TOKEN")
+func SaveToken(token string) error {
+	token = strings.TrimSpace(token)
 	if token == "" {
-		return "", fmt.Errorf("GITHUB_TOKEN not found (keychain or env)")
+		return errors.New("token is empty")
+	}
+	return keyring.Set(Service, User, token)
+}
+
+func LoadGitHubToken() (string, error) {
+	// Env
+	_ = godotenv.Load()
+	if v := strings.TrimSpace(os.Getenv(EnvTokenKey)); v != "" {
+		return v, nil
 	}
 
-	// #2-2 Save to keychain
-	if err := keyring.Set(service, user, token); err != nil {
-		return "", fmt.Errorf("failed to save token to keychain: %w", err)
+	v, err := keyring.Get(Service, User)
+	if err != nil {
+		// go-keyring は OS ごとにエラー文言が違うので、文字列でも吸収する
+		msg := strings.ToLower(err.Error())
+		if strings.Contains(msg, "no found") ||
+			strings.Contains(msg, "no such") ||
+			strings.Contains(msg, "could not be found") {
+			return "", ErrTokenNotFound
+		}
+
+		return "", fmt.Errorf("failed to read token from keyring: %w", err)
+	}
+	v = strings.TrimSpace(v)
+	if v == "" {
+		return "", ErrTokenNotFound
 	}
 
-	return token, nil
+	return v, nil
 }
 
 func DeleteGitHubToken() error {
-	return keyring.Delete(service, user)
+	err := keyring.Delete(Service, User)
+
+	if err != nil {
+		// 既に無い場合は成功扱いにしてUXを良くする
+		msg := strings.ToLower(err.Error())
+		if strings.Contains(msg, "not found") ||
+			strings.Contains(msg, "no such") ||
+			strings.Contains(msg, "could not be found") {
+			return nil
+		}
+		return fmt.Errorf("failed to delete token from keyring: %w", err)
+	}
+	return nil
 }
 
 func GetTokenFromPrompt() (string, error) {
