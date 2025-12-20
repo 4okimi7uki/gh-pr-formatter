@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/4okimi7uki/gh-pr-formatter/internal/auth"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/client"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/gh"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/pkg/repository"
@@ -14,7 +15,6 @@ import (
 	"github.com/4okimi7uki/gh-pr-formatter/internal/template"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/ui"
 	"github.com/briandowns/spinner"
-	"github.com/joho/godotenv"
 )
 
 var Version = "v0.0.0-dev"
@@ -31,10 +31,10 @@ func (s *StringSlice) Set(v string) error {
 }
 
 func main() {
-	_ = godotenv.Load()
-	token := os.Getenv("GITHUB_TOKEN")
-	if token == "" {
-		fmt.Fprintln(os.Stderr, "GITHUB TOKEN not set")
+	ui.DisplayLogo()
+	token, err := auth.LoadGitHubToken()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
@@ -82,8 +82,8 @@ func main() {
 
 	if len(prs) == 0 {
 		s.Stop()
-		fmt.Fprintln(os.Stderr)
-		fmt.Fprintln(os.Stderr, "No merged pull requests found on 'develop' since last 'main' merge.")
+		fmt.Fprintln(os.Stdout)
+		fmt.Fprintln(os.Stdout, "No merged pull requests found on 'develop' since last 'main' merge.")
 		os.Exit(0)
 	}
 
@@ -105,7 +105,7 @@ func main() {
 
 	// display result
 	s.Stop()
-	fmt.Fprintln(os.Stderr)
+	fmt.Fprintln(os.Stdout)
 	ui.SuccessBox("🎉 SUCCESS:", "  Release PR Markdown created successfully!", "  ↳ Output: "+fileName)
 
 	// version check

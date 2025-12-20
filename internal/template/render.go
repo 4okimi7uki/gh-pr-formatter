@@ -78,6 +78,7 @@ func BuildMarkdown(groupedPrs map[string][]int, from time.Time) (string, error) 
 
 	barLength := len(max(headTitle, period))
 	border := mergedColor.Sprint(strings.Repeat("-", barLength))
+	fmt.Fprintln(os.Stdout)
 	fmt.Println("\n" + border)
 	fmt.Print(headTitle)
 	fmt.Print(period)

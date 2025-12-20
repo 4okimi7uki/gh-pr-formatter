@@ -191,7 +191,7 @@ func CheckLatestVersion(owner, repo, version string) (string, error) {
 		currentTrimmed := strings.TrimPrefix(version, "v")
 
 		if latestTrimmed != currentTrimmed {
-			return fmt.Sprintf("a new version of gh-pr-formatter is version available: %s --> %s", version, latest), nil
+			return fmt.Sprintf("* a new version of gh-pr-formatter is version available: %s --> %s", version, latest), nil
 		}
 	}
 	return "", nil
