@@ -51,6 +51,6 @@ func PrintLogo() {
 	for t := range strings.SplitSeq(logo, "\n") {
 		fmt.Fprint(os.Stdout, gradientLine(string(t)+"\n", "#F4307F", "#F9F339"))
 	}
-	fmt.Fprint(os.Stdout, LightOrange.Sprint(" make your release work a littele bit easier :P\n"))
+	fmt.Fprint(os.Stdout, LightOrange.Sprint(" make your release work a little bit easier :P\n"))
 	fmt.Println()
 }
