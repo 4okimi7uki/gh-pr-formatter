@@ -9,4 +9,5 @@ var (
 	LightPurple = color.RGB(231, 76, 255)
 	Purple      = color.RGB(151, 76, 255)
 	Blue        = color.RGB(103, 73, 255)
+	LightOrange = color.RGB(255, 133, 81)
 )
