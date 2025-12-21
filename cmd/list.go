@@ -22,7 +22,8 @@ var listCmd = &cobra.Command{
 		token, err := auth.LoadGitHubToken()
 		if err != nil {
 			if err == auth.ErrTokenNotFound {
-				return fmt.Errorf("not logged in. Run: gh-pr-formatter auth login")
+				return fmt.Errorf("not logged in. %s", ui.Mastered.Sprint("Run: gh-pr-formatter auth login"))
+
 			}
 		}
 
@@ -63,7 +64,7 @@ var listCmd = &cobra.Command{
 		})
 		if err != nil {
 			if errors.Is(err, errNoPRs) {
-				fmt.Println("\nNo merged pull requests found on 'develop' since last 'main' merge.")
+				fmt.Println("No merged pull requests found on 'develop' since last 'main' merge.")
 				return nil
 			}
 

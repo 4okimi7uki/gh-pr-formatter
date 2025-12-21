@@ -84,8 +84,6 @@ func PrintLogo() {
 	dotBar := strings.Repeat("·", len(repoURL)+3)
 	fmt.Println(gradientLine(dotBar, startColor, endColor, width))
 	fmt.Println()
-
-	fmt.Println()
 }
 
 func maxLen(lines []string) int {
