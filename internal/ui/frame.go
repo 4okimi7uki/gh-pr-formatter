@@ -56,13 +56,13 @@ func Boxed(lines ...string) {
 	_, _ = fmt.Fprintln(os.Stdout, bottom)
 }
 
-func SuccessBox(lines ...string) {
-	const WIDTH = 60
-	bar := strings.Repeat(Green.Sprint("═"), WIDTH)
+// func SuccessBox(lines ...string) {
+// 	const WIDTH = 60
+// 	bar := strings.Repeat(Green.Sprint("═"), WIDTH)
 
-	fmt.Fprintln(os.Stderr, bar)
-	for _, l := range lines {
-		fmt.Fprintf(os.Stderr, " %-56s \n", l)
-	}
-	fmt.Fprintln(os.Stderr, bar)
-}
+// 	fmt.Fprintln(os.Stderr, bar)
+// 	for _, l := range lines {
+// 		fmt.Fprintf(os.Stderr, " %-56s \n", l)
+// 	}
+// 	fmt.Fprintln(os.Stderr, bar)
+// }
