@@ -39,12 +39,12 @@ func Boxed(lines ...string) {
 		strings.Repeat(Blue.Sprint("─"), r30) +
 		Blue.Sprint("╯")
 
-	fmt.Fprintln(os.Stderr, top)
+	_, _ = fmt.Fprintln(os.Stdout, top)
 
 	for _, l := range lines {
 		padRightExtra := maxLen - len(l)
 
-		fmt.Fprintf(os.Stderr, "%s%s%s%s%s\n",
+		_, _ = fmt.Fprintf(os.Stdout, "%s%s%s%s%s\n",
 			Pink.Sprint("│"),
 			strings.Repeat(" ", paddingLeft),
 			l,
@@ -53,16 +53,16 @@ func Boxed(lines ...string) {
 		)
 	}
 
-	fmt.Fprintln(os.Stderr, bottom)
+	_, _ = fmt.Fprintln(os.Stdout, bottom)
 }
 
-func SuccessBox(lines ...string) {
-	const WIDTH = 60
-	bar := strings.Repeat(Green.Sprint("═"), WIDTH)
+// func SuccessBox(lines ...string) {
+// 	const WIDTH = 60
+// 	bar := strings.Repeat(Green.Sprint("═"), WIDTH)
 
-	fmt.Fprintln(os.Stderr, bar)
-	for _, l := range lines {
-		fmt.Fprintf(os.Stderr, " %-56s \n", l)
-	}
-	fmt.Fprintln(os.Stderr, bar)
-}
+// 	fmt.Fprintln(os.Stderr, bar)
+// 	for _, l := range lines {
+// 		fmt.Fprintf(os.Stderr, " %-56s \n", l)
+// 	}
+// 	fmt.Fprintln(os.Stderr, bar)
+// }
