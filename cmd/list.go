@@ -30,9 +30,7 @@ var listCmd = &cobra.Command{
 		err = WithSpinner("Resolving repo...", func(update func(string)) error {
 			owner, repoName, err := repository.ResolveRepo(repo)
 			if err != nil {
-				fmt.Fprintf(os.Stderr,
-					"Error: '%s'\n", err)
-				os.Exit(1)
+				return err
 			}
 
 			update(" Checking environment...")
