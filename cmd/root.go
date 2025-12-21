@@ -136,7 +136,7 @@ func runMain(_ *cobra.Command) error {
 		return err
 	}
 	elapsed := time.Since(start)
-	fmt.Fprintf(os.Stdout, "Done in %.1fs 📝✨\n", elapsed.Seconds())
+	fmt.Printf("Done in %.1fs 📝✨\n", elapsed.Seconds())
 
 	// version check
 	if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version); err == nil && msg != "" {

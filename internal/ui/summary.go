@@ -44,6 +44,7 @@ func PrintSummary(w io.Writer, s Summary, loc *time.Location) {
 	_, _ = fmt.Fprintf(w, " %-*s : %s\n", labelWidth, "Output", s.OutputPath)
 	_, _ = fmt.Fprintln(w, strings.Repeat("─", labelWidth*5))
 	_, _ = fmt.Println("\n" + s.PRList)
+	fmt.Println("\n---")
 }
 
 type ListSummary struct {

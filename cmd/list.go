@@ -71,7 +71,7 @@ var listCmd = &cobra.Command{
 		}
 
 		elapsed := time.Since(start)
-		fmt.Fprintf(os.Stdout, "Done in %.1fs 🧸✨\n", elapsed.Seconds())
+		fmt.Printf("Done in %.1fs 🧸✨\n", elapsed.Seconds())
 
 		return nil
 	},
