@@ -1,17 +1,9 @@
 # gh-pr-formatter
 
-<div align="center" markdown="1">
+![Go Version](https://img.shields.io/badge/Go-1.25-blue?logo=go)
+![CI](https://github.com/4okimi7uki/gh-pr-formatter/actions/workflows/lint.yml/badge.svg)
 
-<img src="./pictures/banner.png" width="600px">
-
-![Go Version](https://img.shields.io/badge/Go-1.25-blue?logo=go) ![CI](https://github.com/4okimi7uki/gh-pr-formatter/actions/workflows/lint.yml/badge.svg)
-
-</div>
-
-> 過去バージョンのドキュメントはこちらです。  
-> [`docs/archive/README.md`](./docs/archive)
-
-GitHub GraphQL API を直接叩いて **マージ済み Pull Request を自動収集 & Markdown に整形** する CLI ツールです。
+GitHub CLI (`gh`) を使って **マージ済み Pull Request を自動収集 & Markdown に整形** する CLI ツールです。
 
 - 直近のマージ PR を取得
 - Author ごとに番号をグルーピング
@@ -21,8 +13,8 @@ GitHub GraphQL API を直接叩いて **マージ済み Pull Request を自動�
 
 1. **環境チェック**
 
+- `gh` がインストール済みか確認
 - カレントディレクトリが `.git` 管理下か確認
-- GitHub Token がセットされているか確認（Keychain / 環境変数）
 
 2. **`main` ブランチの最新マージ日時を取得**
 
@@ -38,25 +30,8 @@ GitHub GraphQL API を直接叩いて **マージ済み Pull Request を自動�
 
 ## 使い方
 
-GitHub GraphQL API へアクセスします。[Releases ページ](https://github.com/4okimi7uki/gh-pr-formatter/releases) から対応する実行ファイルをダウンロードしてください。
+本ツールは GitHub CLI（`gh`）を利用して Pull Request 情報を取得します。[Releases ページ](https://github.com/4okimi7uki/gh-pr-formatter/releases) から対応する実行ファイルをダウンロードしてください。
 基本的な利用方法は以下のとおりです。
-
-### 認証
-
-GitHub Token をキーチェーン（OS の資格情報ストア）に保存して利用します。
-
-```bash
-# 対話プロンプトで Token を保存
-./gh-pr-formatter auth login
-
-# 保存済み Token を確認
-./gh-pr-formatter auth status
-
-# Token を削除
-./gh-pr-formatter auth logout
-```
-
-CI など対話入力ができない環境では、環境変数 `GH_PR_FORMATTER_TOKEN` に Token を設定してください。
 
 ### デフォルト動作
 
@@ -74,7 +49,7 @@ CI など対話入力ができない環境では、環境変数 `GH_PR_FORMATTER
 ```bash
 ./gh-pr-formatter --repo owner/repo
 
-# e.g.
+# 例
 ./gh-pr-formatter --repo 4okimi7uki/gh-pr-formatter
 ```
 
@@ -86,7 +61,35 @@ CI など対話入力ができない環境では、環境変数 `GH_PR_FORMATTER
 
 中身をコピーしてPRに貼り付けてください！
 
-<!--## 開発者向け
+## CLI sample
+
+```bash
+~/develop/project (main)
+% ./gh-pr-formatter
+⠙ PR fetching...
+-------------------------
+   Merged Pull Requests
+-------------------------
+@4okimi7uki
+- #18
+- #16
+- #15
+- #13
+- #11
+- #10
+- #9
+- #8
+...
+-------------------------
+==========================================================
+ 🎉 SUCCESS: Release PR Markdown created successfully!
+ -> Output: ./releasePrMarkdown/release_20251124_1419.md
+==========================================================
+```
+
+---
+
+## 開発者向け
 
 ### Build
 
@@ -119,15 +122,13 @@ dist/
 
 マルチプラットフォームに配布したいときは `make build-all` が便利です。
 
-```shell
+<!--```shell
 // format コマンド
 golangci-lint run
 
 // 依存関係整理
 go mod tidy
-```
-
------>
+```-->
 
 ---
 
