@@ -74,7 +74,7 @@ CI など対話入力ができない環境では、環境変数 `GH_PR_FORMATTER
 ```bash
 ./gh-pr-formatter --repo owner/repo
 
-# 例
+# e.g.
 ./gh-pr-formatter --repo 4okimi7uki/gh-pr-formatter
 ```
 
