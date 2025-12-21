@@ -13,7 +13,14 @@ var authLoginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Save a GitHub token securely (Keychain/credential store)",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Fprintln(os.Stderr, "Github token (input hidden): ")
+		// check already logged in
+		v, _ := auth.LoadGitHubToken()
+		if v != "" {
+			fmt.Println("Already logged in (token available)")
+			return nil
+		}
+
+		fmt.Fprintln(os.Stderr, "Enter your Github token: ")
 
 		b, err := term.ReadPassword(int(os.Stdin.Fd()))
 		fmt.Fprintln(os.Stderr)
@@ -31,6 +38,6 @@ var authLoginCmd = &cobra.Command{
 	},
 }
 
-func Init() {
+func init() {
 	authCmd.AddCommand(authLoginCmd)
 }

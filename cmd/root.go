@@ -59,16 +59,16 @@ func init() {
 var errNoPRs = errors.New("no prs")
 
 func runMain(_ *cobra.Command) error {
-	ui.PrintLogo()
-
 	start := time.Now()
 	token, err := auth.LoadGitHubToken()
 	if err != nil {
 		if err == auth.ErrTokenNotFound {
-			return fmt.Errorf("not logged in. Run: gh-pr-formatter auth login")
+			return fmt.Errorf("not logged in. %s", ui.Mastered.Sprint("Run: gh-pr-formatter auth login"))
 		}
 		return err
 	}
+
+	ui.PrintLogo()
 
 	var (
 		prs  []models.MergedPrList

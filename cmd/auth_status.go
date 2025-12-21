@@ -13,10 +13,12 @@ var authStatusCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		_, err := auth.LoadGitHubToken()
 		if err == nil {
-			fmt.Println("Already logged in (token available)")
+			fmt.Println("Auth status: Logged in (token found)")
+			return nil
 		}
 		if err == auth.ErrTokenNotFound {
-			fmt.Println("Not logged in. Run: gh-pr-formatter auth login")
+			fmt.Println("Auth status: Logged out")
+			fmt.Println("Tip: Run `gh-pr-formatter auth login`")
 			return nil
 		}
 		return err

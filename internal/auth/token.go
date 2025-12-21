@@ -39,7 +39,7 @@ func LoadGitHubToken() (string, error) {
 	if err != nil {
 		// go-keyring は OS ごとにエラー文言が違うので、文字列でも吸収する
 		msg := strings.ToLower(err.Error())
-		if strings.Contains(msg, "no found") ||
+		if strings.Contains(msg, "not found") ||
 			strings.Contains(msg, "no such") ||
 			strings.Contains(msg, "could not be found") {
 			return "", ErrTokenNotFound

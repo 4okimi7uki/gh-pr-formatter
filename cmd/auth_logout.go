@@ -11,10 +11,17 @@ var authLogoutCmd = &cobra.Command{
 	Use:   "logout",
 	Short: "Delete the saved GitHub token",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// check already logged in
+		v, _ := auth.LoadGitHubToken()
+		if v == "" {
+			fmt.Println("Already logged out — nothing to do.")
+			return nil
+		}
+
 		if err := auth.DeleteGitHubToken(); err != nil {
 			return err
 		}
-		fmt.Println("Token deleted.")
+		fmt.Println("Logout. Token deleted.")
 		return nil
 	},
 }
