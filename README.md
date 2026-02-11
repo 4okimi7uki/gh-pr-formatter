@@ -36,6 +36,13 @@ GitHub GraphQL API を直接叩いて **マージ済み Pull Request を自動�
 ./releasePrMarkdown/release_YYYYMMDD_hhmm.md
 ```
 
+## ロゴイメージ案
+
+ツールの処理フロー（PR収集 → グルーピング → Markdown 出力）を抽象化したロゴコンセプトを追加しました。
+
+- コンセプト説明: [`docs/logo-concept.md`](./docs/logo-concept.md)
+- SVG 試作: [`pictures/logo-concept.svg`](./pictures/logo-concept.svg)
+
 ## 使い方
 
 GitHub GraphQL API へアクセスします。[Releases ページ](https://github.com/4okimi7uki/gh-pr-formatter/releases) から対応する実行ファイルをダウンロードしてください。

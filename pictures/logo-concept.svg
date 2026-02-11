@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="gh-pr-formatter logo concept">
+  <defs>
+    <linearGradient id="flow" x1="96" y1="64" x2="416" y2="224" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="512" height="512" rx="96" fill="#F8FAFC"/>
+
+  <path d="M120 104C120 89.6406 131.641 78 146 78H206C220.359 78 232 89.6406 232 104V124C232 138.359 220.359 150 206 150H146C131.641 150 120 138.359 120 124V104Z" fill="#DBEAFE"/>
+  <path d="M280 104C280 89.6406 291.641 78 306 78H366C380.359 78 392 89.6406 392 104V124C392 138.359 380.359 150 366 150H306C291.641 150 280 138.359 280 124V104Z" fill="#EDE9FE"/>
+
+  <path d="M176 150V210L256 262L336 210V150" stroke="url(#flow)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <circle cx="256" cy="262" r="26" fill="#7C3AED"/>
+  <circle cx="256" cy="262" r="10" fill="#ffffff"/>
+
+  <path d="M158 276C158 259.431 171.431 246 188 246H324C340.569 246 354 259.431 354 276V378C354 394.569 340.569 408 324 408H188C171.431 408 158 394.569 158 378V276Z" fill="#ffffff" stroke="#1E293B" stroke-width="12"/>
+
+  <rect x="188" y="288" width="136" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="188" y="318" width="102" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="188" y="348" width="118" height="14" rx="7" fill="#CBD5E1"/>
+
+  <circle cx="334" cy="374" r="30" fill="#16A34A"/>
+  <path d="M321 374L331 384L348 365" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
