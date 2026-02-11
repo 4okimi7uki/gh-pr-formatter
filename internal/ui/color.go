@@ -11,4 +11,6 @@ var (
 	Purple      = color.RGB(151, 76, 255)
 	Blue        = color.RGB(103, 73, 255)
 	LightOrange = color.RGB(255, 133, 81)
+	LimeYellow  = color.RGB(202, 234, 119)
+	Lime        = color.RGB(37, 198, 168)
 )
