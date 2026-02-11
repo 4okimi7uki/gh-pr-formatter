@@ -32,12 +32,7 @@ var rootCmd = &cobra.Command{
 			fmt.Printf("gh-pr-formatter %s\n", resolvedVersion)
 
 			// version check
-			if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", resolvedVersion); err == nil && msg != "" {
-				fmt.Fprintf(os.Stdout, "\n%s\n", ui.LimeYellow.Sprint(msg))
-				fmt.Fprintf(os.Stdout, "%s\n", "https://github.com/4okimi7uki/gh-pr-formatter/releases")
-			} else if err != nil {
-				_ = err
-			}
+			printCheckLatestVersion()
 			return nil
 		}
 
@@ -141,11 +136,18 @@ func runMain(_ *cobra.Command) error {
 	fmt.Printf("Done in %.1fs 📝✨\n", elapsed.Seconds())
 
 	// version check
-	if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version); err == nil && msg != "" {
-		ui.Boxed(msg, "Download: https://github.com/4okimi7uki/gh-pr-formatter/releases")
-	} else if err != nil {
-		_ = err // or log.Printf("version check failed: %v", err)
+	if version != "v0.0.0-dev" {
+		printCheckLatestVersion()
 	}
 
 	return nil
+}
+
+func printCheckLatestVersion() {
+	if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version); err == nil && msg != "" {
+		fmt.Fprintf(os.Stdout, "\n%s\n", ui.LimeYellow.Sprint(msg))
+		fmt.Fprintf(os.Stdout, "%s\n", "https://github.com/4okimi7uki/gh-pr-formatter/releases")
+	} else if err != nil {
+		_ = err // or log.Printf("version check failed: %v", err)
+	}
 }
