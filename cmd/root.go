@@ -28,11 +28,13 @@ var rootCmd = &cobra.Command{
 	Long:         "gh-pr-formatter formats merged GitHub pull requests for release notes.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if showVersion {
-			fmt.Printf("gh-pr-formatter %s\n", version)
+			resolvedVersion := gh.ResolvedVersion(version)
+			fmt.Printf("gh-pr-formatter %s\n", resolvedVersion)
 
 			// version check
-			if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version); err == nil && msg != "" {
-				ui.Boxed(msg, "Download: https://github.com/4okimi7uki/gh-pr-formatter/releases")
+			if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", resolvedVersion); err == nil && msg != "" {
+				fmt.Fprintf(os.Stdout, "\n%s\n", ui.LimeYellow.Sprint(msg))
+				fmt.Fprintf(os.Stdout, "%s\n", "https://github.com/4okimi7uki/gh-pr-formatter/releases")
 			} else if err != nil {
 				_ = err
 			}

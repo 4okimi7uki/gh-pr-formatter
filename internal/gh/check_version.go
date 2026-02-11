@@ -4,12 +4,30 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"runtime/debug"
 	"strings"
 	"time"
+
+	"github.com/4okimi7uki/gh-pr-formatter/internal/ui"
 )
 
 type githubRelease struct {
 	TagName string `json:"tag_name"`
+}
+
+func ResolvedVersion(version string) string {
+	if version != "" && version != "v0.0.0-dev" && version != "dev" {
+		return version
+	}
+
+	if bi, ok := debug.ReadBuildInfo(); ok {
+		v := bi.Main.Version
+		if v != "" && v != "(devel)" {
+			return v
+		}
+	}
+
+	return "v0.0.0-dev"
 }
 
 func fetchLatestVersion(owner, repo string) (string, error) {
@@ -53,7 +71,7 @@ func CheckLatestVersion(owner, repo, version string) (string, error) {
 		currentTrimmed := strings.TrimPrefix(version, "v")
 
 		if latestTrimmed != currentTrimmed {
-			return fmt.Sprintf("* a new version of gh-pr-formatter is version available: %s --> %s", version, latest), nil
+			return fmt.Sprintf("* A new version is available: %s → %s", ui.Lime.Sprint(version), ui.Lime.Sprint(latest)), nil
 		}
 	}
 	return "", nil
