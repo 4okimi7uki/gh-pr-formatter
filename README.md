@@ -2,15 +2,18 @@
 
 <div align="center" markdown="1">
 
-<!--<img src="./pictures/banner.png" width="600px">-->
-<img src="./pictures/logo.svg" height="350px">
+<!--<img src="./assets/banner.png" width="600px">-->
+<img src="./assets/logo.svg" height="350px">
 
 ![Go Version](https://img.shields.io/badge/Go-1.25-blue?logo=go) ![CI](https://github.com/4okimi7uki/gh-pr-formatter/actions/workflows/lint.yml/badge.svg)
 
 </div>
 
-> 過去バージョンのドキュメントはこちらです。  
-> [`docs/archive/README.md`](./docs/archive)
+> 過去バージョンのドキュメントは [こちら](./docs/archive)
+
+<div align="center">
+    <img src="./assets/gh-pr-formatter.gif">
+</div>
 
 GitHub GraphQL API を直接叩いて **マージ済み Pull Request を自動収集 & Markdown に整形** する CLI ツールです。
 
