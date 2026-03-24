@@ -25,19 +25,19 @@ func Boxed(lines ...string) {
 	r25 := int(math.Round(w * 0.25))
 	r15 := horizWidth - r30 - r30 - r25
 
-	top := Pink.Sprint("╭") +
-		strings.Repeat(Pink.Sprint("─"), r30) +
-		strings.Repeat(LightPurple.Sprint("─"), r30) +
-		strings.Repeat(Purple.Sprint("─"), r25) +
-		strings.Repeat(Blue.Sprint("─"), r15) +
-		Blue.Sprint("╮")
+	top := Pink("╭") +
+		strings.Repeat(Pink("─"), r30) +
+		strings.Repeat(LightPurple("─"), r30) +
+		strings.Repeat(Purple("─"), r25) +
+		strings.Repeat(Blue("─"), r15) +
+		Blue("╮")
 
-	bottom := Pink.Sprint("╰") +
-		strings.Repeat(Pink.Sprint("─"), r15) +
-		strings.Repeat(LightPurple.Sprint("─"), r25) +
-		strings.Repeat(Purple.Sprint("─"), r30) +
-		strings.Repeat(Blue.Sprint("─"), r30) +
-		Blue.Sprint("╯")
+	bottom := Pink("╰") +
+		strings.Repeat(Pink("─"), r15) +
+		strings.Repeat(LightPurple("─"), r25) +
+		strings.Repeat(Purple("─"), r30) +
+		strings.Repeat(Blue("─"), r30) +
+		Blue("╯")
 
 	_, _ = fmt.Fprintln(os.Stdout, top)
 
@@ -45,11 +45,11 @@ func Boxed(lines ...string) {
 		padRightExtra := maxLen - len(l)
 
 		_, _ = fmt.Fprintf(os.Stdout, "%s%s%s%s%s\n",
-			Pink.Sprint("│"),
+			Pink("│"),
 			strings.Repeat(" ", paddingLeft),
 			l,
 			strings.Repeat(" ", paddingRight+padRightExtra),
-			Blue.Sprint("│"),
+			Blue("│"),
 		)
 	}
 
@@ -58,7 +58,7 @@ func Boxed(lines ...string) {
 
 // func SuccessBox(lines ...string) {
 // 	const WIDTH = 60
-// 	bar := strings.Repeat(Green.Sprint("═"), WIDTH)
+// 	bar := strings.Repeat(Green("═"), WIDTH)
 
 // 	fmt.Fprintln(os.Stderr, bar)
 // 	for _, l := range lines {

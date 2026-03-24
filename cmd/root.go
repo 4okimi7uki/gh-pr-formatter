@@ -60,7 +60,7 @@ func runMain(_ *cobra.Command) error {
 	token, err := auth.LoadGitHubToken()
 	if err != nil {
 		if err == auth.ErrTokenNotFound {
-			return fmt.Errorf("not logged in. %s", ui.Mastered.Sprint("Run: gh-pr-formatter auth login"))
+			return fmt.Errorf("not logged in. %s", ui.Mastered("Run: gh-pr-formatter auth login"))
 		}
 		return err
 	}
@@ -145,7 +145,7 @@ func runMain(_ *cobra.Command) error {
 
 func printCheckLatestVersion() {
 	if msg, err := gh.CheckLatestVersion("4okimi7uki", "gh-pr-formatter", version); err == nil && msg != "" {
-		_, _ = fmt.Fprintf(os.Stdout, "\n%s\n", ui.LimeYellow.Sprint(msg))
+		_, _ = fmt.Fprintf(os.Stdout, "\n%s\n", ui.LimeYellow(msg))
 		_, _ = fmt.Fprintf(os.Stdout, "%s\n", "https://github.com/4okimi7uki/gh-pr-formatter/releases")
 	} else if err != nil {
 		_ = err // or log.Printf("version check failed: %v", err)

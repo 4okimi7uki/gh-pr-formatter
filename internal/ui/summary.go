@@ -33,7 +33,7 @@ const (
 func PrintSummary(w io.Writer, s Summary, loc *time.Location) {
 	period := fmt.Sprintf("%s → Now", s.From.In(loc).Format("2006-01-02 15:04 MST"))
 
-	_, _ = fmt.Fprintln(w, Green.Sprint("\n\n✔ ")+"Release PR markdown generated")
+	_, _ = fmt.Fprintln(w, Green("\n\n✔ ")+"Release PR markdown generated")
 	fmt.Println()
 
 	_, _ = fmt.Fprintln(w, strings.Repeat("─", labelWidth*5))
