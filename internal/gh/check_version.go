@@ -71,7 +71,7 @@ func CheckLatestVersion(owner, repo, version string) (string, error) {
 		currentTrimmed := strings.TrimPrefix(version, "v")
 
 		if latestTrimmed != currentTrimmed {
-			return fmt.Sprintf("* A new version is available: %s → %s", ui.Lime.Sprint(version), ui.Lime.Sprint(latest)), nil
+			return fmt.Sprintf("* A new version is available: %s → %s", ui.Lime(version), ui.Lime(latest)), nil
 		}
 	}
 	return "", nil

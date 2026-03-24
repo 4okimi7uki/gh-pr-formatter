@@ -22,7 +22,7 @@ var listCmd = &cobra.Command{
 		token, err := auth.LoadGitHubToken()
 		if err != nil {
 			if err == auth.ErrTokenNotFound {
-				return fmt.Errorf("not logged in. %s", ui.Mastered.Sprint("Run: gh-pr-formatter auth login"))
+				return fmt.Errorf("not logged in. %s", ui.Mastered("Run: gh-pr-formatter auth login"))
 
 			}
 		}
