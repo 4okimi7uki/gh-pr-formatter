@@ -23,7 +23,9 @@ var authLoginCmd = &cobra.Command{
 				fmt.Println("Already logged in (token available)")
 				return nil
 			} else {
-				auth.DeleteGitHubToken()
+				if err := auth.DeleteGitHubToken(); err != nil {
+					return err
+				}
 			}
 		}
 
