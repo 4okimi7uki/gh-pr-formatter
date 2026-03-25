@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/4okimi7uki/gh-pr-formatter/internal/app"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/auth"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/client"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/gh"
@@ -15,7 +16,7 @@ import (
 )
 
 var listCmd = &cobra.Command{
-	Use:   "list",
+	Use:   "list -r owner/name",
 	Short: "List merged pull requests",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		start := time.Now()
@@ -27,7 +28,7 @@ var listCmd = &cobra.Command{
 			}
 		}
 
-		err = WithSpinner("Resolving repo...", func(update func(string)) error {
+		err = ui.WithSpinner("Resolving repo...", func(update func(string)) error {
 			owner, repoName, err := repository.ResolveRepo(repo)
 			if err != nil {
 				return err
@@ -45,7 +46,7 @@ var listCmd = &cobra.Command{
 				return err
 			}
 			if len(prs) == 0 {
-				return errNoPRs
+				return app.ErrNoPRs
 			}
 
 			loc, _ := time.LoadLocation("Asia/Tokyo")
@@ -61,7 +62,7 @@ var listCmd = &cobra.Command{
 			return nil
 		})
 		if err != nil {
-			if errors.Is(err, errNoPRs) {
+			if errors.Is(err, app.ErrNoPRs) {
 				fmt.Println("No merged pull requests found on 'develop' since last 'main' merge.")
 				return nil
 			}
@@ -78,4 +79,5 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	addCommonFlags(listCmd)
 }
