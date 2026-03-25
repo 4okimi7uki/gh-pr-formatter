@@ -46,8 +46,3 @@ var authStatusCmd = &cobra.Command{
 func init() {
 	authCmd.AddCommand(authStatusCmd)
 }
-
-// github.com
-//   ✗ Authentication failed
-//   - Detail: invalid or expired token
-//   - Tip: Run `gh-pr-formatter auth login`
