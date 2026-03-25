@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/4okimi7uki/gh-pr-formatter/internal/auth"
+	"github.com/4okimi7uki/gh-pr-formatter/internal/gh"
+	"github.com/4okimi7uki/gh-pr-formatter/internal/ui"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 )
@@ -16,8 +18,13 @@ var authLoginCmd = &cobra.Command{
 		// check already logged in
 		v, _ := auth.LoadGitHubToken()
 		if v != "" {
-			fmt.Println("Already logged in (token available)")
-			return nil
+			result, _ := gh.ValidateGitHubToken(v)
+			if result.Valid {
+				fmt.Println("Already logged in (token available)")
+				return nil
+			} else {
+				auth.DeleteGitHubToken()
+			}
 		}
 
 		fmt.Fprintln(os.Stderr, "Enter your Github token: ")
@@ -32,8 +39,9 @@ var authLoginCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Println(" Token saved.")
-		fmt.Printf(" - Tip: you can also set %s for CI.\n", auth.EnvTokenKey)
+		fmt.Printf("%s Token saved successfully.\n", ui.Green("✔"))
+		fmt.Printf("  - Run `gh-pr-formatter auth status` to verify your login.\n")
+		fmt.Printf("  - You can also set %s for CI.\n", auth.EnvTokenKey)
 		return nil
 	},
 }
