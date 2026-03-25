@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/4okimi7uki/gh-pr-formatter/internal/auth"
+	"github.com/4okimi7uki/gh-pr-formatter/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +22,8 @@ var authLogoutCmd = &cobra.Command{
 		if err := auth.DeleteGitHubToken(); err != nil {
 			return err
 		}
-		fmt.Println("Logout. Token deleted.")
+		fmt.Printf("%s Logged out.\n", ui.Mastered("○"))
+		fmt.Printf("  - Run `gh-pr-formatter auth login` to sign in again.\n")
 		return nil
 	},
 }

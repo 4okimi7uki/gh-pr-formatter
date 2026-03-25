@@ -35,7 +35,7 @@ var authStatusCmd = &cobra.Command{
 		}
 		if err == auth.ErrTokenNotFound {
 			fmt.Println("\033[1mgithub.com\033[0m")
-			fmt.Printf("  %s Logged out\n", "○")
+			fmt.Printf("  %s Logged out\n", ui.Mastered("○"))
 			fmt.Printf("  - Tip: Run `gh-pr-formatter auth login`\n")
 			return nil
 		}
