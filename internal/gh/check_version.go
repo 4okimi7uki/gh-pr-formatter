@@ -35,8 +35,9 @@ func ResolvedVersion(version string) string {
 	}
 
 	if info, ok := debug.ReadBuildInfo(); ok {
-		if info.Main.Version != "(devel)" {
-			return info.Main.Version
+		mainVersion := info.Main.Version
+		if mainVersion != "" && mainVersion != "(devel)" {
+			return mainVersion
 		}
 		if v, ok := getVCSBuildVersion(info); ok {
 			return v
