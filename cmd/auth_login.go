@@ -32,8 +32,8 @@ var authLoginCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Println("Token saved.")
-		fmt.Printf("Tip: you can also set %s for CI.\n", auth.EnvTokenKey)
+		fmt.Println(" Token saved.")
+		fmt.Printf(" - Tip: you can also set %s for CI.\n", auth.EnvTokenKey)
 		return nil
 	},
 }

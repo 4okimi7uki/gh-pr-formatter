@@ -15,14 +15,30 @@ type githubRelease struct {
 	TagName string `json:"tag_name"`
 }
 
+func getVCSBuildVersion(info *debug.BuildInfo) (string, bool) {
+	var revision string
+
+	for _, v := range info.Settings {
+		if v.Key == "vcs.revision" {
+			revision = v.Value
+		}
+	}
+	if revision == "" {
+		return "", false
+	}
+	return revision, true
+}
+
 func ResolvedVersion(version string) string {
 	if version != "" && version != "v0.0.0-dev" && version != "dev" {
 		return version
 	}
 
-	if bi, ok := debug.ReadBuildInfo(); ok {
-		v := bi.Main.Version
-		if v != "" && v != "(devel)" {
+	if info, ok := debug.ReadBuildInfo(); ok {
+		if info.Main.Version != "(devel)" {
+			return info.Main.Version
+		}
+		if v, ok := getVCSBuildVersion(info); ok {
 			return v
 		}
 	}
