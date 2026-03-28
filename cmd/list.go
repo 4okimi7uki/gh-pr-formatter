@@ -33,8 +33,12 @@ var listCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
+			err = gh.ValidateRepository(token, owner, repoName)
+			if err != nil {
+				return err
+			}
 
-			update(" Checking environment...")
+			update("Checking environment...")
 			if err := gh.CheckEnvironment(owner + "/" + repoName); err != nil {
 				return err
 			}

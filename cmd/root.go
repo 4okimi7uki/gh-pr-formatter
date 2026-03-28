@@ -6,6 +6,7 @@ import (
 
 	"github.com/4okimi7uki/gh-pr-formatter/internal/app"
 	"github.com/4okimi7uki/gh-pr-formatter/internal/gh"
+	"github.com/4okimi7uki/gh-pr-formatter/internal/pkg/repository"
 	"github.com/spf13/cobra"
 )
 
@@ -32,8 +33,9 @@ var rootCmd = &cobra.Command{
 			return nil
 		}
 
-		if repo == "" {
-			return fmt.Errorf("required flag '--repo' or '-r' not set")
+		owner, repoName, _ := repository.ResolveRepo(repo)
+		if owner == "" && repoName == "" {
+			return fmt.Errorf("required flag '--repo' or '-r' not set\n(use -r owner/repo or run inside a git repository)")
 		}
 
 		return nil
