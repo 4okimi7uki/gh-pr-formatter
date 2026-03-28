@@ -45,7 +45,7 @@ var listCmd = &cobra.Command{
 
 			update("PR fetching...")
 			c := client.NewClient(token)
-			prs, from, err := c.ListMergedPullRequests(owner, repoName, 50, excludePrefix...)
+			prs, from, err := c.ListMergedPullRequests(owner, repoName, limit, excludePrefix...)
 			if err != nil {
 				return err
 			}
