@@ -2,90 +2,109 @@
 
 <div align="center" markdown="1">
 
-<!--<img src="./pictures/banner.png" width="600px">-->
+<!-- <img src="./pictures/banner.png" width="600px"> -->
 <img src="./pictures/logo.svg" height="350px">
 
-![Go Version](https://img.shields.io/badge/Go-1.25-blue?logo=go) ![CI](https://github.com/4okimi7uki/gh-pr-formatter/actions/workflows/lint.yml/badge.svg)
+![Go Version](https://img.shields.io/badge/Go-1.25-blue?logo=go)
+![CI](https://github.com/4okimi7uki/gh-pr-formatter/actions/workflows/lint.yml/badge.svg)
 
 </div>
 
-> 過去バージョンのドキュメントはこちらです。  
+> 過去バージョンのドキュメントはこちら  
 > [`docs/archive/README.md`](./docs/archive)
 
-GitHub GraphQL API を直接叩いて **マージ済み Pull Request を自動収集 & Markdown に整形** する CLI ツールです。
+GitHub GraphQL API を利用して、**マージ済み Pull Request を自動収集し、Markdown 形式に整形する** CLI ツールです。
 
-- 直近のマージ PR を取得
-- Author ごとに番号をグルーピング
+## Features
+
+- 直近のマージ済み PR を取得
+- Author ごとに PR 番号をグルーピング
 - テンプレートを使って Markdown に整形
 
-## 動作フロー
+## How it works
 
-1. **環境チェック**
-
-- カレントディレクトリが `.git` 管理下か確認
-- GitHub Token がセットされているか確認（Keychain / 環境変数）
+1. **環境をチェック**
+   - カレントディレクトリが `.git` 管理下か確認
+   - GitHub Token が設定されているか確認（Keychain / 環境変数）
 
 2. **`main` ブランチの最新マージ日時を取得**
+   - `hotfix/xxx` 形式のブランチは除外して検索
 
-- `hotfix/xxx` 形式のブランチは除外して検索
+3. **その日時から現在までに `develop` へマージされた PR を収集**
 
-3. **その日時〜現在までに `develop` にマージされた PR を収集**
-4. **PR を `author（ログイン名）`ごとにグルーピング**
-5. **Markdown へ整形し、以下の形式で出力**
+4. **PR を author（ログイン名）ごとにグルーピング**
 
-```
+5. **Markdown に整形して出力**
+
+```shell
 ./releasePrMarkdown/release_YYYYMMDD_hhmm.md
 ```
 
-## 使い方
+## Installation
 
-GitHub GraphQL API へアクセスします。[Releases ページ](https://github.com/4okimi7uki/gh-pr-formatter/releases) から対応する実行ファイルをダウンロードしてください。
+GitHub GraphQL API にアクセスするため、対応する実行ファイルを Releases
+からダウンロードして使用してください。
+
+## Usage
+
 基本的な利用方法は以下のとおりです。
 
-### 認証
+### Authentication
 
-GitHub Token をキーチェーン（OS の資格情報ストア）に保存して利用します。
+GitHub Token はキーチェーン（OS の資格情報ストア）に保存して利用します。
 
-```bash
+```shell
 # 対話プロンプトで Token を保存
-./gh-pr-formatter auth login
+gh-pr-formatter auth login
 
 # 保存済み Token を確認
-./gh-pr-formatter auth status
+gh-pr-formatter auth status
 
 # Token を削除
-./gh-pr-formatter auth logout
+gh-pr-formatter auth logout
 ```
 
 CI など対話入力ができない環境では、環境変数 `GH_PR_FORMATTER_TOKEN` に Token を設定してください。
 
-### デフォルト動作
+### Default behavior
 
-カレントディレクトリが `Git` 管理リポジトリである場合、
-そのリポジトリを対象として処理を実行します。
+カレントディレクトリが Git 管理リポジトリである場合、そのリポジトリを対象として処理を実行します。
 
-```bash
-./gh-pr-formatter
+```shell
+gh-pr-formatter
 ```
 
-### 任意リポジトリの指定（オプション）
+### Specify a repository
 
-`--repo` オプションを使用すると、対象とするリポジトリを明示的に指定できます。
+`--repo` オプションを使用すると、対象リポジトリを明示的に指定できます。
 
-```bash
-./gh-pr-formatter --repo owner/repo
+```shell
+gh-pr-formatter --repo owner/repo
 
 # e.g.
-./gh-pr-formatter --repo 4okimi7uki/gh-pr-formatter
+gh-pr-formatter --repo 4okimi7uki/gh-pr-formatter
 ```
 
-> `--repo` を指定した場合、カレントディレクトリが `Git` 管理下である必要はありません。
+> `--repo` は、カレントディレクトリが Git 管理下でない場合に必須です。
 
-### Output
+## Output
 
-`./releasePrMarkdown/release_YYYYMM_HHmm.md` が生成されます。
+以下の形式でファイルが生成されます。
 
-中身をコピーしてPRに貼り付けてください！
+```shell
+./releasePrMarkdown/release_YYYYMM_HHmm.md
+```
+
+生成された Markdown をコピーして、PR などに貼り付けて利用できます。
+
+## Commands
+
+| Command       | Description                            |
+| ------------- | -------------------------------------- |
+| `list`        | List merged pull requests              |
+| `auth login`  | Save your GitHub token                 |
+| `auth status` | Show the current authentication status |
+| `auth logout` | Remove the saved GitHub token          |
 
 <!--## 開発者向け
 
