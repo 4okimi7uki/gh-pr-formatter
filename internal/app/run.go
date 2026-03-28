@@ -46,10 +46,14 @@ func RunMain(_ *cobra.Command, version string, repo string, limit int, excludePr
 		from time.Time
 	)
 
-	err = ui.WithSpinner("Resolving repo...", func(update func(string)) error {
+	err = ui.WithSpinner(" Resolving repo...", func(update func(string)) error {
 		owner, repoName, err := repository.ResolveRepo(repo)
 		if err != nil {
 			return fmt.Errorf("resolve repo: %w", err)
+		}
+		err = gh.ValidateRepository(token, owner, repoName)
+		if err != nil {
+			return err
 		}
 
 		update(" Checking environment...")
@@ -57,7 +61,7 @@ func RunMain(_ *cobra.Command, version string, repo string, limit int, excludePr
 			return err
 		}
 
-		update("PR fetching...")
+		update(" PR fetching...")
 		c := client.NewClient(token)
 		prs, from, err = c.ListMergedPullRequests(owner, repoName, limit, excludePrefix...)
 		if err != nil {

@@ -30,7 +30,7 @@ func WithSpinner(initial string, fn func(update func(string)) error) error {
 	}()
 
 	update := func(msg string) {
-		s.Suffix = padSuffix(" "+msg, spinnerSuffixWidth)
+		s.Suffix = padSuffix("  "+msg, spinnerSuffixWidth)
 		time.Sleep(interval + 10*time.Millisecond)
 	}
 
