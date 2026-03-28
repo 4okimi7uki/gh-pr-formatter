@@ -61,12 +61,12 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolVarP(&showVersion, "version", "v", false, "Print version information")
+	rootCmd.Flags().BoolVarP(&showVersion, "version", "v", false, "print version information")
 	addCommonFlags(rootCmd)
 }
 
 func addCommonFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&repo, "repo", "r", "", "GitHub repository (owner/name) (required)")
-	cmd.Flags().IntVar(&limit, "limit", 50, "Number of PRs to fetch")
-	cmd.Flags().StringSliceVarP(&excludePrefix, "exclude-prefix", "x", nil, "Exclude branch prefixes (repeatable, e.g. -x fix -x chore)")
+	cmd.Flags().StringVarP(&repo, "repo", "r", "", "GitHub repository in owner/name format (required when not in a git repository)")
+	cmd.Flags().IntVar(&limit, "limit", 50, "number of PRs to fetch")
+	cmd.Flags().StringSliceVarP(&excludePrefix, "exclude-prefix", "x", nil, "exclude branch prefixes (repeatable, e.g. -x fix -x chore)")
 }

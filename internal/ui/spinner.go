@@ -21,7 +21,7 @@ func WithSpinner(initial string, fn func(update func(string)) error) error {
 	const interval = 100 * time.Millisecond
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Writer = os.Stderr
-	s.Suffix = padSuffix(initial, spinnerSuffixWidth)
+	s.Suffix = padSuffix(" "+initial, spinnerSuffixWidth)
 
 	s.Start()
 	defer func() {
@@ -30,7 +30,7 @@ func WithSpinner(initial string, fn func(update func(string)) error) error {
 	}()
 
 	update := func(msg string) {
-		s.Suffix = padSuffix("  "+msg, spinnerSuffixWidth)
+		s.Suffix = padSuffix(" "+msg, spinnerSuffixWidth)
 		time.Sleep(interval + 10*time.Millisecond)
 	}
 
