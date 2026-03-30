@@ -29,7 +29,7 @@ var rootCmd = &cobra.Command{
 			return nil
 		}
 
-		if app.IsAuthCommand(cmd) {
+		if app.IsSkipRepoFlagCommand(cmd) {
 			return nil
 		}
 

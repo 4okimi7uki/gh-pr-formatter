@@ -20,9 +20,9 @@ import (
 
 var ErrNoPRs = errors.New("no prs")
 
-func IsAuthCommand(cmd *cobra.Command) bool {
+func IsSkipRepoFlagCommand(cmd *cobra.Command) bool {
 	for c := cmd; c != nil; c = c.Parent() {
-		if c.Name() == "auth" {
+		if c.Name() == "auth" || c.Name() == "completion" {
 			return true
 		}
 	}
